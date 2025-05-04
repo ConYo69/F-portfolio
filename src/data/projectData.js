@@ -25,7 +25,7 @@ const projectData = [
       description: "A web application that helps small business owners track daily sales and expenses, generate business insights, and receive management advice. By analyzing inputted data, it predicts future performance and supports better decision-making.",
       image: "/capstone.png",
       technologies: ["PHP", "JavaScript", "HTML", "CSS", "MySQL"],
-      repoLink: "https://github.com/ConYo69?tab=repositories",
+      repoLink: "https://lightslategrey-stork-969980.hostingersite.com/home/#",
       liveLink: "https://lightslategrey-stork-969980.hostingersite.com/home/#",
       featured: false
     },
