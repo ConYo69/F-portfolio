@@ -15,7 +15,7 @@ const projectData = [
       description: "An admin dashboard for e-commerce platforms. Includes analytics, order management, and inventory tracking features.",
       image: "/buildz.png",
       technologies: ["PHP", "HTML", "Node.js", "CSS", "JavaScript", "MongoDB"],
-      repoLink: "https://github.com/ConYo69?tab=repositories",
+      repoLink: "https://github.com/ConYo69/BuildZ.git",
       liveLink: "https://github.com/ConYo69/BuildZ.git",
       featured: true
     },
