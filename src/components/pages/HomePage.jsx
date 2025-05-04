@@ -35,10 +35,10 @@ const HomePage = () => {
   return (
     <>
       <DocumentHead 
-        title="Developer Portfolio | Your Name"
+        title="WillCraft"
         description="Professional developer portfolio showcasing my skills, projects, and experience in web development and software engineering."
         keywords="web developer, portfolio, frontend, react, javascript"
-        ogTitle="Developer Portfolio | Your Name"
+        ogTitle="WillCraft"
         ogDescription="Professional developer portfolio showcasing my skills, projects, and experience in web development and software engineering."
         ogType="website"
         ogUrl="https://your-portfolio-domain.com"
