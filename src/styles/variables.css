@@ -1,51 +1,113 @@
 :root {
-  /* Color Scheme */
+  /* Color Scheme - Enhanced with subtle variations */
   --primary-color: #fffdd0e6; /* Cream with transparency */
   --secondary-color: #d40000; /* Deep red */
+  --secondary-color-light: #ff3333; /* Lighter red for hover effects */
+  --secondary-color-dark: #a70000; /* Darker red for shadows and accents */
   --dark-color: #222; /* Dark gray (nearly black) */
+  --dark-color-light: #333; /* Slightly lighter dark for variation */
   --light-color: #ffffff; /* White */
+  --light-color-off: #f8f8f8; /* Off-white for subtle backgrounds */
   --bg-color: #f8f8f8; /* Light background */
+  --bg-color-alt: #f2f2f2; /* Alternate background for subtle contrast */
   --text-color: var(--dark-color);
+  --text-color-light: #555; /* Lighter text for secondary content */
 
-  /* Typography */
+  /* Typography - Enhanced */
   --font-main: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: "Poppins", "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semi: 600;
+  --font-weight-bold: 700;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.6;
+  --line-height-loose: 1.8;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.05em;
 
   /* Spacing */
+  --space-xxs: 0.125rem; /* 2px */
   --space-xs: 0.25rem; /* 4px */
   --space-sm: 0.5rem; /* 8px */
   --space-md: 1rem; /* 16px */
   --space-lg: 1.5rem; /* 24px */
   --space-xl: 2rem; /* 32px */
   --space-xxl: 3rem; /* 48px */
+  --space-xxxl: 4rem; /* 64px */
+  --space-xxxxl: 6rem; /* 96px */
 
   /* Border Radius */
+  --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 16px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  /* Shadows - Enhanced */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --shadow-focus: 0 0 0 3px rgba(212, 0, 0, 0.2);
+  --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+  --shadow-active: 0 2px 4px rgba(0, 0, 0, 0.2);
 
   /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-normal: 300ms ease;
-  --transition-slow: 500ms ease;
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 300ms cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy effect for playful animations */
+
+  /* Easings */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Container widths */
   --container-sm: 640px;
   --container-md: 768px;
   --container-lg: 1024px;
   --container-xl: 1280px;
+  --container-2xl: 1440px;
+  --container-max: 1600px;
 
   /* Z-index layers */
   --z-below: -1;
   --z-normal: 1;
   --z-above: 10;
+  --z-dropdown: 50;
+  --z-sticky: 80;
+  --z-fixed: 90;
   --z-modal: 100;
   --z-toast: 1000;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(
+    120deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  --gradient-dark: linear-gradient(135deg, var(--dark-color), #000000);
+  --gradient-overlay: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.3)
+  );
+
+  /* Animation durations */
+  --animation-fast: 0.3s;
+  --animation-normal: 0.6s;
+  --animation-slow: 1s;
+
+  /* Focus styles */
+  --focus-ring: 0 0 0 3px rgba(212, 0, 0, 0.3);
 }

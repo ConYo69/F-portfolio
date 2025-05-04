@@ -1,12 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { FaCalendarAlt, FaTag, FaArrowRight, FaEye } from 'react-icons/fa';
 import { formatDate, truncateText } from '../../utils/helpers';
 import './BlogCard.css';
 import { cardVariant, hoverScale } from '../../utils/animationConfig';
 
 const BlogCard = ({ blog, delay = 0 }) => {
+  // Animation variants specific to this component
   const imageVariants = {
+    initial: {
+      scale: 1
+    },
     hover: {
       scale: 1.05,
       transition: { duration: 0.3 }
@@ -16,9 +21,11 @@ const BlogCard = ({ blog, delay = 0 }) => {
   const overlayVariants = {
     initial: {
       opacity: 0,
+      backdropFilter: 'blur(0px)'
     },
     hover: {
       opacity: 1,
+      backdropFilter: 'blur(2px)',
       transition: { duration: 0.3 }
     }
   };
@@ -31,7 +38,7 @@ const BlogCard = ({ blog, delay = 0 }) => {
     hover: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.3 }
+      transition: { duration: 0.3, delay: 0.1 }
     }
   };
   
@@ -41,7 +48,23 @@ const BlogCard = ({ blog, delay = 0 }) => {
       scale: 1, 
       opacity: 1,
       transition: { duration: 0.3 }
+    },
+    hover: {
+      scale: 1.05,
+      y: -2,
+      backgroundColor: 'rgba(212, 0, 0, 0.2)',
+      transition: { duration: 0.2 }
     }
+  };
+  
+  const contentVariants = {
+    initial: { y: 0 },
+    hover: { y: -5, transition: { duration: 0.3 } }
+  };
+  
+  const arrowVariants = {
+    initial: { x: 0 },
+    hover: { x: 5, transition: { duration: 0.3, repeat: Infinity, repeatType: "reverse" } }
   };
   
   return (
@@ -54,43 +77,49 @@ const BlogCard = ({ blog, delay = 0 }) => {
       whileHover="hover"
       viewport={{ once: true, amount: 0.2 }}
     >
-      <motion.div 
-        className="blog-card-inner"
-        whileHover={{ y: -5 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Link to={`/blog/${blog.id}`} className="blog-image-link">
+      <div className="blog-card-inner">
+        <Link to={`/blog/${blog.id}`} className="blog-image-link" aria-label={`Read ${blog.title}`}>
           <motion.div className="blog-image">
             <motion.img 
               src={blog.coverImage} 
-              alt={blog.title} 
+              alt="" // Decorative image, title is in link text
+              loading="lazy"
               variants={imageVariants}
             />
             <motion.div 
               className="blog-overlay"
               variants={overlayVariants}
               initial="initial"
+              aria-hidden="true"
             >
-              <motion.span 
+              <motion.div 
+                className="overlay-content"
                 variants={buttonVariants}
                 whileHover={hoverScale}
               >
-                Read More
-              </motion.span>
+                <FaEye className="overlay-icon" />
+                <span>Read Article</span>
+              </motion.div>
             </motion.div>
           </motion.div>
         </Link>
         
-        <div className="blog-content">
+        <motion.div 
+          className="blog-content"
+          variants={contentVariants}
+        >
           <div className="blog-meta">
             <motion.time 
               dateTime={blog.date}
+              className="blog-date"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: delay + 0.2 }}
             >
+              <FaCalendarAlt className="meta-icon" aria-hidden="true" />
               {formatDate(blog.date)}
             </motion.time>
+            
             <motion.div 
               className="blog-tags"
               initial="hidden"
@@ -109,19 +138,19 @@ const BlogCard = ({ blog, delay = 0 }) => {
                   key={index} 
                   className="blog-tag"
                   variants={tagVariants}
-                  whileHover={{ 
-                    backgroundColor: 'rgba(212, 0, 0, 0.2)',
-                    scale: 1.05 
-                  }}
+                  whileHover="hover"
+                  aria-label={`Tag: ${tag}`}
                 >
+                  <FaTag className="tag-icon" aria-hidden="true" />
                   {tag}
                 </motion.span>
               ))}
               {blog.tags.length > 2 && (
                 <motion.span 
-                  className="blog-tag"
+                  className="blog-tag more-tags"
                   variants={tagVariants}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover="hover"
+                  aria-label={`${blog.tags.length - 2} more tags`}
                 >
                   +{blog.tags.length - 2}
                 </motion.span>
@@ -148,21 +177,24 @@ const BlogCard = ({ blog, delay = 0 }) => {
           </motion.p>
           
           <motion.div
+            className="read-more-container"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: delay + 0.5 }}
+            whileHover="hover"
           >
-            <motion.div 
-              whileHover={{ x: 5 }}
-              className="read-more-container"
-            >
-              <Link to={`/blog/${blog.id}`} className="read-more">
-              Explore
-              </Link>
-            </motion.div>
+            <Link to={`/blog/${blog.id}`} className="read-more">
+              <span>Read More</span>
+              <motion.span 
+                className="arrow-icon"
+                variants={arrowVariants}
+              >
+                <FaArrowRight aria-hidden="true" />
+              </motion.span>
+            </Link>
           </motion.div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </motion.article>
   );
 };

@@ -1,10 +1,38 @@
-import React from 'react';
-import { FaArrowDown, FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import React, { useEffect } from 'react';
+import { FaArrowDown, FaGithub, FaLinkedin, FaTwitter, FaChevronRight } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import './Hero.css';
 import { slideUp, fadeIn, staggerContainer } from '../../utils/animationConfig';
 
 const Hero = () => {
+  useEffect(() => {
+    // Create particles on component mount for better performance
+    const createParticles = () => {
+      const particlesContainer = document.querySelector('.hero-particles');
+      if (!particlesContainer) return;
+
+      // Clear existing particles
+      particlesContainer.innerHTML = '';
+      
+      // Create new particles
+      for (let i = 0; i < 4; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particlesContainer.appendChild(particle);
+      }
+    };
+    
+    createParticles();
+    
+    // Clean up function
+    return () => {
+      const particlesContainer = document.querySelector('.hero-particles');
+      if (particlesContainer) {
+        particlesContainer.innerHTML = '';
+      }
+    };
+  }, []);
+  
   const scrollToAbout = () => {
     const aboutSection = document.querySelector('#about');
     if (aboutSection) {
@@ -46,8 +74,30 @@ const Hero = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5 }
+      transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }
     }
+  };
+  
+  const buttonVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (custom) => ({
+      opacity: 1,
+      y: 0,
+      transition: { 
+        delay: custom * 0.1 + 0.8,
+        duration: 0.6,
+        ease: [0.34, 1.56, 0.64, 1]
+      }
+    }),
+    hover: {
+      y: -5,
+      boxShadow: "0 10px 25px rgba(212, 0, 0, 0.3)",
+      transition: { 
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    },
+    tap: { scale: 0.95 }
   };
 
   return (
@@ -61,6 +111,7 @@ const Hero = () => {
       <div className="hero-bg">
         <div className="hero-pattern"></div>
         <div className="hero-gradient"></div>
+        <div className="hero-particles"></div>
       </div>
 
       <div className="container hero-container">
@@ -97,19 +148,24 @@ const Hero = () => {
           <motion.p 
             className="hero-description"
             variants={slideUp}
+            custom={3}
           >
-            I build responsive, user-friendly web applications with a focus on performance and clean code.
+            I build responsive, user-friendly web applications with a focus on performance, 
+            clean code, and exceptional user experiences.
           </motion.p>
           
           <motion.div 
             className="hero-buttons"
-            variants={slideUp}
+            variants={fadeIn}
+            custom={4}
           >
             <motion.a 
               href="#projects" 
               className="btn btn-primary"
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(212, 0, 0, 0.3)" }}
-              whileTap={{ scale: 0.95 }}
+              variants={buttonVariants}
+              custom={0}
+              whileHover="hover"
+              whileTap="tap"
               onClick={(e) => {
                 e.preventDefault();
                 const projectsSection = document.querySelector('#projects');
@@ -122,13 +178,15 @@ const Hero = () => {
                 }
               }}
             >
-              View My Work
+              View My Work <FaChevronRight className="btn-icon" />
             </motion.a>
             <motion.a 
               href="#contact" 
               className="btn btn-secondary"
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)" }}
-              whileTap={{ scale: 0.95 }}
+              variants={buttonVariants}
+              custom={1}
+              whileHover="hover"
+              whileTap="tap"
               onClick={(e) => {
                 e.preventDefault();
                 const contactSection = document.querySelector('#contact');
@@ -141,7 +199,7 @@ const Hero = () => {
                 }
               }}
             >
-              Contact Me
+              Contact Me <FaChevronRight className="btn-icon" />
             </motion.a>
           </motion.div>
 
@@ -155,7 +213,8 @@ const Hero = () => {
               rel="noopener noreferrer"
               aria-label="GitHub Profile"
               variants={socialItemVariant}
-              whileHover={{ y: -5, color: "#d40000", scale: 1.1 }}
+              whileHover={{ y: -5, scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
               className="social-link"
             >
               <FaGithub />
@@ -166,7 +225,8 @@ const Hero = () => {
               rel="noopener noreferrer"
               aria-label="LinkedIn Profile"
               variants={socialItemVariant}
-              whileHover={{ y: -5, color: "#d40000", scale: 1.1 }}
+              whileHover={{ y: -5, scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
               className="social-link"
             >
               <FaLinkedin />
@@ -177,7 +237,8 @@ const Hero = () => {
               rel="noopener noreferrer"
               aria-label="Twitter Profile"
               variants={socialItemVariant}
-              whileHover={{ y: -5, color: "#d40000", scale: 1.1 }}
+              whileHover={{ y: -5, scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
               className="social-link"
             >
               <FaTwitter />

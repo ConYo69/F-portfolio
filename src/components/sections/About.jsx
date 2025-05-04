@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaDownload } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaDownload, FaCode, FaServer, FaDatabase, FaGit, FaDesktop, FaGraduationCap, FaBuilding } from 'react-icons/fa';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import './About.css';
 import { fadeIn, slideUp, scaleUp, slideInLeft, slideInRight } from '../../utils/animationConfig';
@@ -12,16 +12,24 @@ const About = () => {
   });
   
   const [activeTab, setActiveTab] = useState('skills'); // 'skills' or 'education'
+  const [skillsVisible, setSkillsVisible] = useState(false);
+
+  // Show skills animation when tab becomes visible
+  useEffect(() => {
+    if (isVisible && activeTab === 'skills') {
+      setSkillsVisible(true);
+    }
+  }, [isVisible, activeTab]);
 
   const skills = [
-    { name: 'HTML/CSS', level: 85 },
-    { name: 'JavaScript', level: 60 },
-    { name: 'React', level: 70 },
-    { name: 'Node.js', level: 75 },
-    { name: 'MongoDB', level: 70 },
-    { name: 'Git', level: 85 },
-    { name: 'Responsive Design', level: 80 },
-    { name: 'UI/UX Basics', level: 75 }
+    { name: 'HTML/CSS', level: 85, icon: <FaCode /> },
+    { name: 'JavaScript', level: 60, icon: <FaCode /> },
+    { name: 'React', level: 70, icon: <FaCode /> },
+    { name: 'Node.js', level: 75, icon: <FaServer /> },
+    { name: 'MongoDB', level: 70, icon: <FaDatabase /> },
+    { name: 'Git', level: 85, icon: <FaGit /> },
+    { name: 'Responsive Design', level: 80, icon: <FaDesktop /> },
+    { name: 'UI/UX Basics', level: 75, icon: <FaDesktop /> }
   ];
 
   const education = [
@@ -29,19 +37,19 @@ const About = () => {
       degree: 'BS in Information Technology',
       institution: 'Western Mindanao State University',
       year: '2021 - 2025',
-      description: 'Focused on web development and software engineering principles.'
+      description: 'Focused on web development and software engineering principles with an emphasis on modern development practices and technologies.'
     },
     { 
       degree: 'Web Development Bootcamp',
       institution: 'codecademy',
       year: '2021-2025',
-      description: 'Intensive training in modern web technologies and frameworks.'
+      description: 'Intensive training in modern web technologies and frameworks, including React, Node.js, and responsive design principles.'
     },
     { 
       degree: 'UI/UX Design Certificate',
       institution: 'Design Institute',
       year: '2023',
-      description: 'Learned principles of user interface and experience design.'
+      description: 'Learned principles of user interface and experience design, focusing on creating intuitive and engaging digital experiences.'
     }
   ];
 
@@ -49,7 +57,7 @@ const About = () => {
     hidden: { width: 0 },
     visible: (level) => ({
       width: `${level}%`,
-      transition: { duration: 1, ease: 'easeOut' }
+      transition: { duration: 1.2, ease: 'easeOut', delay: 0.3 }
     })
   };
   
@@ -64,12 +72,13 @@ const About = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.3
+        duration: 0.4,
+        ease: [0.34, 1.56, 0.64, 1]
       }
     },
     hover: {
-      y: -2,
-      opacity: 0.9,
+      y: -3,
+      opacity: 1,
       transition: {
         duration: 0.2
       }
@@ -87,7 +96,8 @@ const About = () => {
       x: 0,
       height: 'auto',
       transition: {
-        duration: 0.5
+        duration: 0.6,
+        ease: 'easeOut'
       }
     },
     exit: {
@@ -100,23 +110,56 @@ const About = () => {
     }
   };
   
-  const educationItemVariants = {
+  const skillItemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: (custom) => ({
+    visible: (i) => ({
       opacity: 1,
       y: 0,
       transition: {
-        delay: 0.1 * custom,
-        duration: 0.4
+        delay: 0.1 * i,
+        duration: 0.5,
+        ease: [0.34, 1.56, 0.64, 1]
       }
-    })
+    }),
+    hover: {
+      y: -5,
+      transition: { duration: 0.2 }
+    }
+  };
+  
+  const educationItemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: 0.15 * i,
+        duration: 0.5,
+        ease: [0.34, 1.56, 0.64, 1]
+      }
+    }),
+    hover: {
+      x: 5,
+      y: -5,
+      transition: { duration: 0.3 }
+    }
   };
 
   const downloadButtonVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        delay: 0.5,
+        duration: 0.5,
+        ease: [0.34, 1.56, 0.64, 1]
+      }
+    },
     hover: {
-      scale: 1.05,
-      boxShadow: "0 6px 12px rgba(212, 0, 0, 0.3)",
-      transition: { duration: 0.3 }
+      y: -8,
+      boxShadow: "0 15px 30px rgba(212, 0, 0, 0.2)",
+      transition: { duration: 0.4 }
     },
     tap: {
       scale: 0.95
@@ -151,15 +194,24 @@ const About = () => {
           >
             <motion.div 
               className="profile-image-container"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={isVisible ? { 
+                opacity: 1, 
+                scale: 1,
+                transition: { 
+                  duration: 0.8,
+                  ease: [0.34, 1.56, 0.64, 1]
+                }
+              } : { opacity: 0, scale: 0.8 }}
               whileHover={{ 
                 scale: 1.02,
-                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+                boxShadow: '0 25px 35px -5px rgba(0, 0, 0, 0.2), 0 15px 15px -5px rgba(0, 0, 0, 0.1)'
               }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.5 }}
             >
               <motion.img 
                 src="/profile.jpg" 
-                alt="Profile" 
+                alt="William - Software Developer" 
                 className="profile-image"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.5 }}
@@ -188,13 +240,13 @@ const About = () => {
           >
             <motion.h3 variants={slideUp} custom={2}>Who Am I?</motion.h3>
             <motion.p variants={slideUp} custom={3}>
-              I'm a passionate Software Developer with a focus on creating responsive and user-friendly web applications. With experience in both front-end and back-end technologies, I enjoy bringing ideas to life through code.
+              I'm a <strong>passionate Software Developer</strong> with a focus on creating responsive and user-friendly web applications. With experience in both front-end and back-end technologies, I enjoy bringing ideas to life through clean, efficient code.
             </motion.p>
             <motion.p variants={slideUp} custom={4}>
-              My journey in software development began during my studies, and I've been continuously learning and improving my skills ever since. I enjoy solving complex problems and creating elegant solutions.
+              My journey in software development began during my studies, and I've been continuously learning and improving my skills ever since. I enjoy tackling complex problems and crafting elegant solutions that deliver exceptional user experiences.
             </motion.p>
             <motion.p variants={slideUp} custom={5}>
-              When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, or enjoying outdoor activities.
+              When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, and sharing my knowledge with the development community. I'm always open to new challenges and opportunities to grow.
             </motion.p>
             
             <motion.div 
@@ -214,7 +266,7 @@ const About = () => {
                   aria-pressed={activeTab === 'skills'}
                   aria-controls="skills-content"
                 >
-                  Skills
+                  Technical Skills
                 </motion.button>
                 <motion.button
                   className={`tab-button ${activeTab === 'education' ? 'active' : ''}`}
@@ -232,72 +284,86 @@ const About = () => {
               </div>
               
               <div className="tab-content-container">
-                {activeTab === 'skills' && (
-                  <motion.div 
-                    id="skills-content"
-                    className="skills-container"
-                    variants={tabContentVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                  >
-                    {skills.map((skill, index) => (
-                      <motion.div 
-                        key={skill.name} 
-                        className="skill"
-                        variants={fadeIn}
-                        custom={index}
-                      >
-                        <div className="skill-header">
-                          <div className="skill-name">{skill.name}</div>
-                          <div className="skill-percentage">{skill.level}%</div>
-                        </div>
-                        <div className="skill-bar">
-                          <motion.div 
-                            className="skill-level"
-                            variants={skillVariants}
-                            initial="hidden"
-                            animate={isVisible ? "visible" : "hidden"}
-                            custom={skill.level}
-                          />
-                        </div>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                )}
-                
-                {activeTab === 'education' && (
-                  <motion.div 
-                    id="education-content"
-                    className="education-container"
-                    variants={tabContentVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                  >
-                    {education.map((item, index) => (
-                      <motion.div 
-                        key={item.degree} 
-                        className="education-item"
-                        variants={educationItemVariants}
-                        custom={index}
-                      >
-                        <div className="education-timeline">
-                          <div className="education-dot"></div>
-                          <div className="education-line"></div>
-                        </div>
-                        <div className="education-content">
-                          <h4 className="education-degree">{item.degree}</h4>
-                          <div className="education-details">
-                            <span className="education-institution">{item.institution}</span>
-                            <span className="education-year">{item.year}</span>
+                <AnimatePresence mode="wait">
+                  {activeTab === 'skills' && (
+                    <motion.div 
+                      id="skills-content"
+                      className="skills-container"
+                      key="skills"
+                      variants={tabContentVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                    >
+                      {skills.map((skill, index) => (
+                        <motion.div 
+                          key={skill.name} 
+                          className="skill"
+                          custom={index}
+                          variants={skillItemVariants}
+                          whileHover="hover"
+                        >
+                          <div className="skill-header">
+                            <div className="skill-name">
+                              <span className="skill-name-icon">{skill.icon}</span>
+                              {skill.name}
+                            </div>
+                            <div className="skill-percentage">{skill.level}%</div>
                           </div>
-                          <p className="education-description">{item.description}</p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                )}
+                          <div className="skill-bar">
+                            <motion.div 
+                              className="skill-level"
+                              variants={skillVariants}
+                              initial="hidden"
+                              animate={skillsVisible ? "visible" : "hidden"}
+                              custom={skill.level}
+                            />
+                          </div>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
+                  
+                  {activeTab === 'education' && (
+                    <motion.div 
+                      id="education-content"
+                      className="education-container"
+                      key="education"
+                      variants={tabContentVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                    >
+                      {education.map((item, index) => (
+                        <motion.div 
+                          key={item.degree} 
+                          className="education-item"
+                          variants={educationItemVariants}
+                          custom={index}
+                          whileHover="hover"
+                        >
+                          <div className="education-timeline">
+                            <div className="education-dot"></div>
+                            <div className="education-line"></div>
+                          </div>
+                          <div className="education-content">
+                            <h4 className="education-degree">{item.degree}</h4>
+                            <div className="education-details">
+                              <span className="education-institution">
+                                <FaBuilding className="institution-icon" aria-hidden="true" />
+                                {item.institution}
+                              </span>
+                              <span className="education-year">
+                                <FaGraduationCap aria-hidden="true" /> {item.year}
+                              </span>
+                            </div>
+                            <p className="education-description">{item.description}</p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.div>
           </motion.div>

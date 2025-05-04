@@ -47,12 +47,24 @@
   margin-bottom: var(--space-lg);
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   position: relative;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary-color) rgba(0, 0, 0, 0.1);
 }
 
-.tab-button-container {
-  display: flex;
-  flex-direction: column;
-  position: relative;
+/* Scrollbar styling for tabs */
+.tabs-header::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tabs-header::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-full);
+}
+
+.tabs-header::-webkit-scrollbar-thumb {
+  background-color: var(--secondary-color);
+  border-radius: var(--radius-full);
 }
 
 .tab-button {
@@ -68,6 +80,61 @@
   white-space: nowrap;
   text-align: center;
   z-index: 2;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  outline: none;
+}
+
+.tab-icon {
+  color: var(--secondary-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.tab-button:hover .tab-icon,
+.tab-button.active .tab-icon {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.tab-text {
+  position: relative;
+  z-index: 1;
+}
+
+.tab-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(212, 0, 0, 0.05);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  border-radius: var(--radius-sm);
+  z-index: 0;
+}
+
+.tab-button:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tab-button.active {
+  color: var(--secondary-color);
+}
+
+.tab-button:focus-visible {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 2px;
 }
 
 .tab-indicator {
@@ -76,10 +143,10 @@
   left: 0;
   height: 3px;
   background-color: var(--secondary-color);
-}
-
-.tab-button.active {
-  color: var(--secondary-color);
+  border-radius: var(--radius-full);
+  transition: all 0.4s ease;
+  z-index: 1;
+  box-shadow: 0 0 8px rgba(212, 0, 0, 0.3);
 }
 
 .tabs-content {
@@ -93,16 +160,26 @@
   left: 0;
   width: 100%;
   height: auto;
-  padding: var(--space-md);
-  border-radius: var(--radius-md);
+  padding: var(--space-xl);
+  border-radius: var(--radius-lg);
   background-color: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.tab-panel:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--secondary-color), var(--shadow-md);
+}
+
+.job-header {
+  margin-bottom: var(--space-lg);
 }
 
 .job-title {
-  margin-bottom: var(--space-md);
   display: flex;
   flex-direction: column;
 }
@@ -110,7 +187,7 @@
 .job-title h3 {
   font-size: 1.8rem;
   color: var(--dark-color);
-  margin-bottom: var(--space-xs);
+  margin-bottom: var(--space-sm);
   display: inline-block;
   position: relative;
 }
@@ -123,20 +200,64 @@
   width: 40px;
   height: 3px;
   background-color: var(--secondary-color);
+  transition: width 0.4s var(--ease-bounce);
 }
 
-.job-duration {
-  font-size: 1rem;
-  color: var(--secondary-color);
-  font-weight: 600;
+.job-title:hover h3::after {
+  width: 100%;
+}
+
+.job-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
   margin-top: var(--space-xs);
 }
 
+.job-company,
+.job-duration {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: 600;
+  color: var(--dark-color);
+  opacity: 0.8;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.job-company:hover,
+.job-duration:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.job-icon {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+}
+
 .job-description {
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
   line-height: 1.8;
   color: var(--dark-color);
   font-size: 1.05rem;
+  position: relative;
+  padding-left: var(--space-md);
+  border-left: 2px solid rgba(212, 0, 0, 0.2);
+}
+
+.responsibilities-heading,
+.technologies-used h4 {
+  font-size: 1.15rem;
+  margin-bottom: var(--space-md);
+  color: var(--dark-color);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.tech-icon {
+  color: var(--secondary-color);
 }
 
 .responsibilities-list {
@@ -149,6 +270,11 @@
   padding-left: var(--space-lg);
   position: relative;
   line-height: 1.6;
+  transition: transform 0.3s ease;
+}
+
+.responsibilities-list li:hover {
+  transform: translateX(5px);
 }
 
 .bullet {
@@ -158,10 +284,8 @@
   font-size: 1.2rem;
 }
 
-.technologies-used h4 {
-  font-size: 1.1rem;
-  margin-bottom: var(--space-sm);
-  color: var(--dark-color);
+.technologies-used {
+  margin-top: var(--space-lg);
 }
 
 .tech-tags {
@@ -179,11 +303,18 @@
   font-weight: 600;
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.tag-icon {
+  font-size: 0.85rem;
 }
 
 .tech-tag:hover {
   background-color: rgba(212, 0, 0, 0.2);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.05);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -204,6 +335,10 @@
 
   .job-description {
     font-size: 1.1rem;
+  }
+
+  .tab-panel {
+    padding: var(--space-xxl);
   }
 }
 
@@ -229,6 +364,10 @@
   .job-description {
     font-size: 1rem;
   }
+
+  .tab-panel {
+    padding: var(--space-lg);
+  }
 }
 
 /* Mobile landscape */
@@ -237,38 +376,23 @@
     padding: var(--space-lg) 0;
   }
 
-  .tabs-container {
-    flex-direction: column;
-  }
-
   .tabs-header {
     flex-wrap: nowrap;
     overflow-x: auto;
     margin-bottom: var(--space-md);
     padding-bottom: var(--space-xs);
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
     scrollbar-width: thin;
     scrollbar-color: var(--secondary-color) rgba(0, 0, 0, 0.1);
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .tabs-header::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  .tabs-header::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: var(--radius-full);
-  }
-
-  .tabs-header::-webkit-scrollbar-thumb {
-    background-color: var(--secondary-color);
-    border-radius: var(--radius-full);
   }
 
   .tab-button {
     padding: var(--space-sm) var(--space-md);
     font-size: 0.9rem;
     white-space: nowrap;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
   }
 
   .tabs-content {
@@ -279,8 +403,15 @@
     font-size: 1.4rem;
   }
 
+  .job-meta {
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+  }
+
   .job-description {
     font-size: 0.95rem;
+    padding-left: var(--space-sm);
   }
 
   .responsibilities-list li {
@@ -290,6 +421,10 @@
   .tech-tag {
     font-size: 0.85rem;
     padding: var(--space-xs) var(--space-sm);
+  }
+
+  .tab-panel {
+    padding: var(--space-md);
   }
 }
 

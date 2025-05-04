@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import './Header.css';
-import { navItemVariant } from '../../utils/animationConfig';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -21,71 +18,41 @@ const Header = () => {
     { name: 'Contact', path: '/#contact' }
   ];
 
-  // Handle scroll event to change header style with throttling
-  const handleScroll = useCallback(() => {
-    const scrollPosition = window.scrollY;
-    setIsScrolled(scrollPosition > 50);
-  }, []);
-
-  // Handle window resize with debouncing
-  const handleResize = useCallback(() => {
-    setIsMobile(window.innerWidth <= 768);
-    if (window.innerWidth > 768) {
-      setMenuOpen(false);
-      document.body.classList.remove('no-scroll');
-    }
-  }, []);
-
+  // Handle scroll
   useEffect(() => {
-    // Set up initial state
-    handleScroll();
-    handleResize();
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
     
-    // Set up event listeners
     window.addEventListener('scroll', handleScroll);
-    
-    // Debounce resize event
-    let resizeTimer;
-    const debouncedResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(handleResize, 100);
-    };
-    window.addEventListener('resize', debouncedResize);
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', debouncedResize);
-      clearTimeout(resizeTimer);
-    };
-  }, [handleScroll, handleResize]);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  // Close mobile menu when changing routes
+  // Close menu on route change
   useEffect(() => {
-    if (menuOpen) {
-      setMenuOpen(false);
-      document.body.classList.remove('no-scroll');
-    }
-  }, [location, menuOpen]);
+    setMenuOpen(false);
+    document.body.classList.remove('no-scroll');
+  }, [location.pathname, location.hash]);
 
+  // Toggle menu
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-    // Prevent body scroll when menu is open on mobile
-    if (!menuOpen) {
+    const newMenuState = !menuOpen;
+    setMenuOpen(newMenuState);
+    
+    if (newMenuState) {
       document.body.classList.add('no-scroll');
     } else {
       document.body.classList.remove('no-scroll');
     }
   };
   
-  // Handle hash link clicks - fixed to work from any page
+  // Handle hash link clicks
   const handleClickHash = (e) => {
     e.preventDefault();
-    const hash = e.target.hash;
+    const hash = e.currentTarget.hash;
     
-    // Close mobile menu after clicking
-    if (menuOpen) {
-      toggleMenu();
-    }
+    setMenuOpen(false);
+    document.body.classList.remove('no-scroll');
 
     // If we're already on the home page, just scroll to the section
     if (location.pathname === '/') {
@@ -100,7 +67,6 @@ const Header = () => {
           behavior: 'smooth'
         });
         
-        // Update URL without reload
         window.history.pushState(null, '', hash);
       }
     } else {
@@ -114,60 +80,40 @@ const Header = () => {
     if (path === '/') return location.pathname === '/' && !location.hash;
     if (path.includes('#')) {
       const hash = path.split('#')[1];
-      return location.pathname === '/' && location.hash === `#${hash}`;
+      return location.hash === `#${hash}`;
     }
     return location.pathname.startsWith(path);
   };
 
   return (
-    <motion.header 
-      className={`header ${isScrolled ? 'scrolled' : ''}`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-    >
+    <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container header-container">
-        <motion.div 
-          className="logo"
-          variants={navItemVariant}
-          initial="hidden"
-          animate="visible"
-        >
-          <Link to="/" aria-label="DevPortfolio Homepage">
+        <div className="logo">
+          <Link to="/">
             <span className="logo-text">WillCraft</span>
           </Link>
-        </motion.div>
+        </div>
         
         {/* Mobile Toggle Button */}
         <button 
           className={`mobile-toggle ${menuOpen ? 'open' : ''}`}
           onClick={toggleMenu}
-          aria-expanded={menuOpen}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-controls="navigation"
-          aria-haspopup="true"
         >
-          <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
           <span className="bar"></span>
           <span className="bar"></span>
           <span className="bar"></span>
         </button>
         
         {/* Main Navigation */}
-        <nav 
-          id="navigation" 
-          className={`navigation ${menuOpen ? 'open' : ''}`}
-          inert={isMobile && !menuOpen ? "" : undefined}
-        >
+        <div className={`navigation ${menuOpen ? 'open' : ''}`} id="navigation">
           <ul className="nav-list">
-            {navLinks.map((link, index) => (
+            {navLinks.map((link) => (
               <li key={link.name} className="nav-item">
                 {link.path.includes('#') ? (
                   <a 
                     href={link.path}
                     className={`nav-link ${isLinkActive(link.path) ? 'active' : ''}`}
                     onClick={handleClickHash}
-                    aria-current={isLinkActive(link.path) ? 'page' : undefined}
                   >
                     {link.name}
                   </a>
@@ -175,7 +121,6 @@ const Header = () => {
                   <Link 
                     to={link.path}
                     className={`nav-link ${isLinkActive(link.path) ? 'active' : ''}`}
-                    aria-current={isLinkActive(link.path) ? 'page' : undefined}
                   >
                     {link.name}
                   </Link>
@@ -184,28 +129,24 @@ const Header = () => {
             ))}
           </ul>
           
-          {/* Only show close button in mobile menu */}
-          {isMobile && (
-            <button 
-              className="close-menu-btn"
-              onClick={toggleMenu}
-              aria-label="Close menu"
-            >
-              Close
-            </button>
-          )}
-        </nav>
-        
-        {/* Backdrop for mobile menu */}
-        {menuOpen && isMobile && (
-          <div 
-            className="menu-backdrop"
+          {/* Close button */}
+          <button 
+            className="close-menu-btn"
             onClick={toggleMenu}
-            aria-hidden="true"
+          >
+            Close
+          </button>
+        </div>
+        
+        {/* Backdrop */}
+        {menuOpen && (
+          <div 
+            className="menu-backdrop" 
+            onClick={toggleMenu}
           ></div>
         )}
       </div>
-    </motion.header>
+    </header>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaEye, FaCode } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import './ProjectCard.css';
 import { cardVariant, hoverScale } from '../../utils/animationConfig';
@@ -14,11 +14,17 @@ const ProjectCard = ({ project, isVisible, delay }) => {
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.5 }
+      transition: { 
+        duration: 0.5,
+        ease: [0.34, 1.56, 0.64, 1]
+      }
     },
     hover: {
-      scale: 1.05,
-      transition: { duration: 0.3 }
+      scale: 1.1,
+      transition: { 
+        duration: 0.6,
+        ease: "easeOut"
+      }
     }
   };
 
@@ -29,8 +35,10 @@ const ProjectCard = ({ project, isVisible, delay }) => {
     },
     hover: {
       opacity: 1,
-      backdropFilter: 'blur(2px)',
-      transition: { duration: 0.3 }
+      backdropFilter: 'blur(4px)',
+      transition: { 
+        duration: 0.3 
+      }
     }
   };
 
@@ -43,17 +51,27 @@ const ProjectCard = ({ project, isVisible, delay }) => {
       y: 0,
       opacity: 1,
       transition: { 
-        duration: 0.3,
-        delay: 0.1
+        duration: 0.4,
+        delay: 0.1,
+        ease: [0.34, 1.56, 0.64, 1]
       }
     }
   };
 
   const techTagVariants = {
     initial: { scale: 0.8, opacity: 0 },
-    animate: { 
+    animate: (i) => ({ 
       scale: 1, 
       opacity: 1,
+      transition: { 
+        delay: 0.1 * i + delay * 0.5, 
+        duration: 0.4,
+        ease: [0.34, 1.56, 0.64, 1]
+      }
+    }),
+    hover: { 
+      y: -3,
+      scale: 1.05,
       transition: { duration: 0.3 }
     }
   };
@@ -64,10 +82,36 @@ const ProjectCard = ({ project, isVisible, delay }) => {
       x: 0, 
       opacity: 1,
       transition: { 
-        duration: 0.5,
-        delay: 0.2,
+        duration: 0.6,
+        delay: 0.3 + delay,
         type: "spring", 
         stiffness: 100 
+      }
+    }
+  };
+  
+  const titleVariants = {
+    initial: { opacity: 0, y: 10 },
+    animate: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        delay: 0.2 + delay,
+        duration: 0.5,
+        ease: [0.34, 1.56, 0.64, 1]
+      }
+    }
+  };
+  
+  const descriptionVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        delay: 0.3 + delay,
+        duration: 0.5,
+        ease: "easeOut"
       }
     }
   };
@@ -79,14 +123,10 @@ const ProjectCard = ({ project, isVisible, delay }) => {
       initial="hidden"
       animate={isVisible ? "visible" : "hidden"}
       custom={delay}
-      viewport={{ once: true, amount: 0.25 }}
       whileHover="hover"
+      viewport={{ once: true, amount: 0.25 }}
     >
-      <motion.div 
-        className="project-card-inner"
-        whileHover={{ y: -5 }}
-        transition={{ duration: 0.3 }}
-      >
+      <motion.div className="project-card-inner">
         <motion.div className="project-image">
           <motion.img 
             src={project.image} 
@@ -113,7 +153,7 @@ const ProjectCard = ({ project, isVisible, delay }) => {
                 whileTap={{ scale: 0.95 }}
                 aria-label={`View ${project.title} code on GitHub`}
               >
-                <FaGithub aria-hidden="true" />
+                <FaCode aria-hidden="true" />
                 <span>Code</span>
               </motion.a>
               <motion.a 
@@ -125,7 +165,7 @@ const ProjectCard = ({ project, isVisible, delay }) => {
                 whileTap={{ scale: 0.95 }}
                 aria-label={`View ${project.title} live demo`}
               >
-                <FaExternalLinkAlt aria-hidden="true" />
+                <FaEye aria-hidden="true" />
                 <span>Demo</span>
               </motion.a>
             </motion.div>
@@ -133,8 +173,23 @@ const ProjectCard = ({ project, isVisible, delay }) => {
         </motion.div>
         
         <div className="project-content">
-          <h3 className="project-title">{project.title}</h3>
-          <p className="project-description">{project.description}</p>
+          <motion.h3 
+            className="project-title"
+            variants={titleVariants}
+            initial="initial"
+            animate="animate"
+          >
+            {project.title}
+          </motion.h3>
+          
+          <motion.p 
+            className="project-description"
+            variants={descriptionVariants}
+            initial="initial"
+            animate="animate"
+          >
+            {project.description}
+          </motion.p>
           
           <motion.div 
             className="project-technologies"
@@ -143,8 +198,7 @@ const ProjectCard = ({ project, isVisible, delay }) => {
             variants={{
               visible: {
                 transition: {
-                  staggerChildren: 0.1,
-                  delayChildren: 0.2
+                  staggerChildren: 0.05
                 }
               }
             }}
@@ -154,14 +208,10 @@ const ProjectCard = ({ project, isVisible, delay }) => {
                 key={index} 
                 className="project-tech-tag"
                 variants={techTagVariants}
+                custom={index}
                 initial="initial"
                 animate="animate"
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ 
-                  backgroundColor: 'rgba(212, 0, 0, 0.2)',
-                  scale: 1.05,
-                  y: -2
-                }}
+                whileHover="hover"
               >
                 {tech}
               </motion.span>
