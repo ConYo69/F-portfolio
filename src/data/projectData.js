@@ -5,8 +5,8 @@ const projectData = [
       description: "A responsive developer portfolio website built with React and Vite. Features smooth animations, blog functionality, and project showcases.",
       image: "/portfolio.png",
       technologies: ["React", "Vite", "CSS Modules", "Framer Motion"],
-      repoLink: "hhttps://github.com/ConYo69?tab=repositories",
-      liveLink: "https://your-portfolio-url.com",
+      repoLink: "https://github.com/ConYo69/F-portfolio.git",
+      liveLink: "https://wcraft.netlify.app",
       featured: true
     },
     {
@@ -35,8 +35,8 @@ const projectData = [
       description: "A web application that lets users browse a full Pokédex, create and manage custom teams, simulate battles, mark favorite Pokémon, and view their activity history. Designed for a smooth and engaging user experience.",
       image: "/pokemon.png",
       technologies: ["React", "JavaScript", "HTML", "CSS", "tailwind"],
-      repoLink: "https://github.com/ConYo69?tab=repositories",
-      liveLink: "https://your-task-app.com",
+      repoLink: "https://github.com/ConYo69/Pokemon.git",
+      liveLink: "https://github.com/ConYo69/Pokemon.git",
       featured: false
     },
     {
@@ -45,8 +45,8 @@ const projectData = [
       description: "A simple and intuitive to-do list web app that helps users organize tasks, set deadlines, and stay productive with features like task prioritization, due date reminders, and progress tracking.",
       image: "/todo.png",
       technologies: ["React", "Node.js", "MongoDB", "Spoonacular API"],
-      repoLink: "https://github.com/ConYo69?tab=repositories",
-      liveLink: "https://your-recipe-app.com",
+      repoLink: "https://github.com/ConYo69/To-Do-List.git",
+      liveLink: "https://github.com/ConYo69/To-Do-List.git",
       featured: false
     }
   ];
